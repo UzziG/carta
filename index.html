@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>carta</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      position: relative;
+      width: 320px;
+      height: 270px;
+      perspective: 1000px;
+      user-select: none;
+    }
+    .envelope {
+      width: 320px;
+      height: 200px;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      z-index: 2;
+      transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+    .envelope.open {
+      transform: rotateX(60deg) translateY(-90px) scale(1.07);
+      z-index: 1;
+    }
+    .base {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 320px;
+      height: 150px;
+      background: linear-gradient(135deg, #f3e5ab 70%, #e0c68c 100%);
+      border-radius: 0 0 18px 18px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.13);
+      border: 2px solid #d1b97a;
+      z-index: 2;
+    }
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 320px;
+      height: 110px;
+      background: linear-gradient(135deg, #fdf6da 65%, #e0c68c 100%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      border-top: 2px solid #d1b97a;
+      border-left: 2px solid #d1b97a;
+      border-right: 2px solid #d1b97a;
+      transition: transform 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+      z-index: 3;
+    }
+    .envelope.open .flap {
+      transform: rotateX(-120deg) scale(1.07);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    .left-side, .right-side {
+      position: absolute;
+      top: 50px;
+      width: 80px;
+      height: 150px;
+      background: linear-gradient(90deg, #f3e5ab 80%, #e0c68c 100%);
+      z-index: 3;
+    }
+    .left-side {
+      left: 0;
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      border-left: 2px solid #d1b97a;
+      border-bottom: 2px solid #d1b97a;
+    }
+    .right-side {
+      right: 0;
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+      border-right: 2px solid #d1b97a;
+      border-bottom: 2px solid #d1b97a;
+    }
+    .bottom-triangle {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 120px;
+      height: 60px;
+      background: linear-gradient(135deg, #f9f4d7 60%, #e0c68c 100%);
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+      z-index: 5;
+      border-bottom: 2px solid #d1b97a;
+      border-left: 2px solid #d1b97a;
+      border-right: 2px solid #d1b97a;
+    }
+    .stamp {
+      position: absolute;
+      right: 24px;
+      top: 96px;
+      width: 38px;
+      height: 38px;
+      background: #c44f3d;
+      border: 2px dashed #fff;
+      border-radius: 7px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1em;
+      font-family: serif;
+      color: #fff9;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transform: rotate(-7deg);
+    }
+    .letter {
+      position: absolute;
+      top: 47px;
+      left: 25px;
+      width: 270px;
+      height: 120px;
+      background: #fff;
+      border-radius: 7px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.13);
+      opacity: 0;
+      transform: translateY(30px) scale(0.97);
+      transition: opacity 0.7s, transform 0.7s;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Georgia', serif;
+      font-size: 1.18em;
+      color: #333;
+      text-align: center;
+      padding: 18px;
+      border: 1.5px solid #e0c68c;
+    }
+    .show-letter {
+      opacity: 1;
+      transform: translateY(-8px) scale(1.04);
+    }
+    .botones {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: flex;
+      gap: 12px;
+    }
+    .botones button {
+      background: #e0c68c;
+      color: #5e4823;
+      border: 2px solid #d1b97a;
+      border-radius: 7px;
+      font-family: 'Georgia', serif;
+      font-size: 1em;
+      font-weight: bold;
+      padding: 8px 18px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+    }
+    .botones button:hover {
+      background: #f3e5ab;
+      transform: scale(1.07);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="envelope" id="sobre">
+      <div class="flap"></div>
+      <div class="base"></div>
+      <div class="left-side"></div>
+      <div class="right-side"></div>
+      <div class="bottom-triangle"></div>
+      <div class="stamp">✉️</div>
+    </div>
+    <div class="letter" id="carta">
+      ¡Hola Ojitos!<br>
+      Esperaré por ti, porque Dios sabe lo mucho que le pido que seas tú<br>
+      <span style="font-size:0.83em;color:#c44f3d;">Con cariño</span>
+    </div>
+    <div class="botones">
+      <button onclick="abrirSobre(true)">Abrir sobre</button>
+      <button onclick="abrirSobre(false)">Cerrar sobre</button>
+    </div>
+  </div>
+  <script>
+    let abierto = false;
+    function abrirSobre(abrir) {
+      if (abrir) {
+        document.getElementById('sobre').classList.add('open');
+        document.getElementById('carta').classList.add('show-letter');
+        abierto = true;
+      } else {
+        document.getElementById('sobre').classList.remove('open');
+        document.getElementById('carta').classList.remove('show-letter');
+        abierto = false;
+      }
+    }
+  </script>
+</body>
+</html>
